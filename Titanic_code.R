@@ -1,6 +1,8 @@
 # My Titanic competition submission code
-library(randomForest); library(caret); library(doSNOW); library(rpart); library(rpart.plot);
-library(infotheo); library(corrplot)
+library(randomForest); library(caret); library(doSNOW); library(rpart); library(rpart.plot);library(infotheo); library(corrplot);require(easycsv)
+# loading data
+easycsv::fread_folder("C:/University/2 -MA - GIS/MLDM/MLDMproject")
+
 
 # feature engineering -------------------------
 # combining the train and test sets
@@ -10,6 +12,8 @@ combined <- rbind(train, test)
 combined$Survived <- as.factor(combined$Survived)
 combined$Pclass <- as.factor(combined$Pclass)
 combined$Sex <- as.factor(combined$Sex)
+combined$agerecord <- ifelse(is.na(combined$Age),0,1)
+age_col = c(train$Age,test$Age)
 
 # a function that takes the full name and extracts the title from it
 title_create <- function(f_name) {
@@ -83,7 +87,7 @@ crossFun <- function(seed, X, Y, K, Times, algo) {
 
 
 # after 1st submission feature engineering ---------------
-combined$Age <- age_col$Age       #resets age for different imputations
+combined$Age <- age_col#$Age       #resets age for different imputations
 
 combined$child <- 0
 combined$child[which(combined$Age<14)] <- 1
